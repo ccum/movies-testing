@@ -42,23 +42,43 @@ public class MovieRepositoryJdbcIntegrationTest {
 		
 		Collection<Movie> movies = movieRepositoryJdbc.findAll();
 		assertThat(movies,is(Arrays.asList(
-				new Movie(1, "Dark Knight", 152, Genre.ACTION),
-                new Movie(2, "Memento", 113, Genre.THRILLER),
-                new Movie(3, "Matrix", 136, Genre.ACTION)
+				new Movie(1, "Dark Knight", 152, Genre.ACTION,"Christopher Nolan"),
+                new Movie(2, "Memento", 113, Genre.THRILLER,"Christopher Nolan"),
+                new Movie(3, "Matrix", 136, Genre.ACTION,"Lana Wachowski"),
+                new Movie(4, "Super 8", 136, Genre.ACTION,"J.J. Abrams"),
+                new Movie(5, "Superman", 146, Genre.ACTION,"Zack Snyder")
 				)));
 	}
 	@Test
 	public void load_movie_by_id() {
 		Movie result = movieRepositoryJdbc.findById(2);
-		assertThat(result, is(new Movie(2,"Memento",113,Genre.THRILLER)));
+		assertThat(result, is(new Movie(2,"Memento",113,Genre.THRILLER,"Christopher Nolan")));
 	}
 	
 	@Test
 	public void insert_a_movie() {
-		 Movie movie = new Movie("Super 8", 112, Genre.THRILLER);
+		 Movie movie = new Movie("Super 10", 112, Genre.THRILLER,"No Director");
 		 movieRepositoryJdbc.saveOrUpdate(movie);
-         Movie movieFromDb = movieRepositoryJdbc.findById(4);
-         assertThat( movieFromDb, is(new Movie(4, "Super 8", 112, Genre.THRILLER)) );
+         Movie movieFromDb = movieRepositoryJdbc.findById(6);
+         assertThat( movieFromDb, is(new Movie(6, "Super 10", 112, Genre.THRILLER,"No Director")) );
+	}
+	
+	@Test
+	public void find_by_name() {
+		Collection<Movie> movies = movieRepositoryJdbc.findByName("Super");
+		assertThat(movies,is(Arrays.asList(
+					new Movie(4, "Super 8", 136, Genre.ACTION,"J.J. Abrams"),
+	                new Movie(5, "Superman", 146, Genre.ACTION,"Zack Snyder")
+				)));
+	}
+	
+	@Test
+	public void find_by_director(){
+		Collection<Movie> movies = movieRepositoryJdbc.findByDirector("Christopher Nolan");
+		assertThat(movies,is(Arrays.asList(
+				new Movie(1, "Dark Knight", 152, Genre.ACTION,"Christopher Nolan"),
+                new Movie(2, "Memento", 113, Genre.THRILLER,"Christopher Nolan")
+			)));
 	}
 	
 	@After

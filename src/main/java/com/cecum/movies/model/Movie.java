@@ -4,18 +4,20 @@ public class Movie {
 	
 	private Integer id;
 	private String name;
-	private int minutes;
+	private Integer minutes;
 	private Genre genre;
+	private String director;
 	
-	public Movie( String name, int minutes, Genre genre){
-		this(null,name,minutes,genre);
+	public Movie( String name, int minutes, Genre genre, String director){
+		this(null,name,minutes,genre, director);
 	}
 	
-	public Movie(Integer id, String name, int minutes, Genre genre) {
+	public Movie(Integer id, String name, int minutes, Genre genre, String director) {
 		this.id = id;
 		this.name = name;
 		this.minutes = minutes;
 		this.genre = genre;
+		this.director = director;
 	}
 
 	public Integer getId() {
@@ -26,7 +28,7 @@ public class Movie {
 		return name;
 	}
 
-	public int getMinutes() {
+	public Integer getMinutes() {
 		return minutes;
 	}
 
@@ -34,10 +36,15 @@ public class Movie {
 		return genre;
 	}
 
+	public String getDirector() {
+		return director;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((director == null) ? 0 : director.hashCode());
 		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + minutes;
@@ -54,6 +61,11 @@ public class Movie {
 		if (getClass() != obj.getClass())
 			return false;
 		Movie other = (Movie) obj;
+		if (director == null) {
+			if (other.director != null)
+				return false;
+		} else if (!director.equals(other.director))
+			return false;
 		if (genre != other.genre)
 			return false;
 		if (id == null) {
@@ -70,6 +82,14 @@ public class Movie {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Movie [id=" + id + ", name=" + name + ", minutes=" + minutes + ", genre=" + genre + ", director="
+				+ director + "]";
+	}
+
+	
 	
 	
 

@@ -35,10 +35,22 @@ public class MovieRepositoryJdbc implements MovieRepository {
 
 	@Override
 	public void saveOrUpdate(Movie movie) {
-		jdbcTemplate.update("insert into movies (name, minutes, genre) values (?, ?, ?)",
-                movie.getName(), movie.getMinutes(), movie.getGenre().toString());
+		jdbcTemplate.update("insert into movies (name, minutes, genre, director) values (?, ?, ?, ?)",
+                movie.getName(), movie.getMinutes(), movie.getGenre().toString(), movie.getDirector().toString());
 
 	}
+	@Override
+	public Collection<Movie> findByName(String name) {
+		
+		return jdbcTemplate.query("select * from movies where LOWER(name) like '%" + name.toLowerCase() + "%'", movieMapper);
+	}
+	@Override
+	public Collection<Movie> findByDirector(String director) {
+		Object[] args = {director};
+		return jdbcTemplate.query("select * from movies where director = ?",args, movieMapper);
+	}
+	
+	
 	
 	private static RowMapper<Movie> movieMapper = new RowMapper<Movie>() {
 
@@ -48,7 +60,9 @@ public class MovieRepositoryJdbc implements MovieRepository {
 			return new Movie(rs.getInt("id"),
 					rs.getString("name"),
 					rs.getInt("minutes"),
-					Genre.valueOf(rs.getString("genre")));
+					Genre.valueOf(rs.getString("genre")),
+					rs.getString("director")
+					);
 		}
 		
 	};

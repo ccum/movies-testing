@@ -30,5 +30,27 @@ public class MovieService {
 		Collection<Movie> result =  movieRepository.findAll().stream().filter(movie -> movie.getMinutes() <= length).collect(Collectors.toList());
 		return result;
 	}
+	
+	public Collection<Movie> findMoviesByTemplate(Movie template) {
+		if(template.getMinutes()<0){
+			throw new IllegalArgumentException("This value is not allowed");
+		}
+		
+		Collection<Movie> result = movieRepository.findAll();
+		if(template.getName()!=null) {
+			result=result.stream().filter(movie -> movie.getName().toLowerCase().contains(template.getName().toLowerCase())).collect(Collectors.toList());
+		}
+		if(template.getMinutes()!=null) {
+			result=result.stream().filter(movie -> movie.getMinutes() <= template.getMinutes()).collect(Collectors.toList());
+		}
+		if(template.getGenre()!=null) {
+			result=result.stream().filter(movie -> movie.getGenre() == template.getGenre()).collect(Collectors.toList());
+		}
+		if(template.getDirector()!=null) {
+			result=result.stream().filter(movie -> movie.getDirector().toLowerCase().contains(template.getDirector())).collect(Collectors.toList());
+		}
+		return result;
+		
+	}
 
 }
